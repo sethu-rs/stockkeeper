@@ -26,6 +26,7 @@ application-local.yml
 node_modules/
 venv/
 __pycache__/
+.python-version
 
 # DynamoDB local data (if any)
 dynamodb-data/

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
  *       endpoint: http://localhost:8000
  *       region: us-east-1
  *     credentials:
- *       access-key: fakeAccessKey
- *       secret-key: fakeSecretKey
+ *       access-key: dummy
+ *       secret-key: dummy
  */
 @Getter
 @Setter
