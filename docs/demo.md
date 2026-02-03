@@ -3,6 +3,7 @@
 ## Prerequisites
 
 - Java 21
+- Python 3.10.x
 - Docker (or Colima) for DynamoDB Local
 
 ## 1. Start DynamoDB Local
