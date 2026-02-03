@@ -7,7 +7,7 @@ The system is deployed in an active–passive multi-region AWS architecture.
 This repository is intended as a **demo and discussion artifact**, focused on domain modeling, correctness, and architectural trade-offs.
 
 ## Architecture Overview & Flow Diagrams
- ### 👉: [AWS_Architecture_and_Flow_Diagrams](docs/api-flow-diagrams.md)
+ ### 👉  [AWS_Architecture_and_Flow_Diagrams](docs/api-flow-diagrams.md)
 
 This document covers:
 - Deployment topology and DR assumptions
@@ -16,7 +16,7 @@ This document covers:
 - Idempotency and conditional mutation patterns
 
 ## Demo
- ### 👉: [Demo Guide](docs/demo.md)
+ ### 👉  [Demo Guide](docs/demo.md)
 
 The demo guide walks through:
 - Local setup (DynamoDB Local)
