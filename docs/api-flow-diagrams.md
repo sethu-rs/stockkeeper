@@ -65,7 +65,7 @@ flowchart TB
 
     subgraph DynamoDB["DynamoDB (State & Persistence Only)"]
         Tables[("CapacityStock + Reservations")]
-        Transaction["TransactWriteItems"]
+        Transaction["TransactWriteItems (Atomic)"]
     end
 
     API --> Controller --> Validator --> Service
@@ -106,9 +106,16 @@ flowchart TD
 
     Pass --> Transaction
 
-    subgraph Transaction["TransactWriteItems (Atomic)"]
-        T1["Update Stock: available -= qty, held += qty<br/>Condition: available_capacity >= qty"]
-        T2["Put Reservation: status=HELD<br/>Condition: attribute_not_exists(reservation_id)"]
+    subgraph Transaction["TransactWriteItems"]
+        direction TB
+
+        AtomicNote["Atomic operation<br/>All writes succeed or fail together"]
+
+        T1["Update Stock<br/>available -= qty<br/>held += qty<br/><br/>Condition:<br/>available_capacity >= qty"]
+        T2["Put Reservation<br/>status = HELD<br/><br/>Condition:<br/>attribute_not_exists(reservation_id)"]
+
+        AtomicNote --> T1
+        T1 --> T2
     end
 
     Transaction --> Result{Result}
@@ -149,9 +156,17 @@ flowchart TD
     ValidateTrans -->|No| Err422[422 Invalid Transition]
     ValidateTrans -->|Yes| Transaction
 
-    subgraph Transaction["TransactWriteItems (Atomic)"]
-        T1["Update Stock:<br/>fromBucket -= qty, toBucket += qty<br/>Condition: fromBucket >= qty"]
-        T2["Update Reservation:<br/>status = targetState<br/>Condition: status = expectedState"]
+    subgraph Transaction["TransactWriteItems"]
+        direction TB
+
+        AtomicNote["Atomic operation<br/>All updates succeed or fail together"]
+    
+        T1["Update Stock<br/>fromBucket -= qty<br/>toBucket += qty<br/><br/>Condition:<br/>fromBucket >= qty"]
+    
+        T2["Update Reservation<br/>status = targetState<br/><br/>Condition:<br/>status = expectedState"]
+    
+        AtomicNote --> T1
+        T1 --> T2
     end
 
     Transaction --> Result{Result}
