@@ -160,13 +160,11 @@ flowchart TD
         direction TB
 
         AtomicNote["Atomic operation<br/>All updates succeed or fail together"]
+        AtomicNote --> T1
+        AtomicNote --> T2
     
         T1["Update Stock<br/>fromBucket -= qty<br/>toBucket += qty<br/><br/>Condition:<br/>fromBucket >= qty"]
-    
         T2["Update Reservation<br/>status = targetState<br/><br/>Condition:<br/>status = expectedState"]
-    
-        AtomicNote --> T1
-        T1 --> T2
     end
 
     Transaction --> Result{Result}
