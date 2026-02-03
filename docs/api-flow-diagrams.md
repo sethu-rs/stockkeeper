@@ -156,7 +156,7 @@ flowchart TD
     ValidateTrans -->|No| Err422[422 Invalid Transition]
     ValidateTrans -->|Yes| Transaction
 
-    subgraph Transaction["TransactWriteItems"]
+    subgraph Transaction["TransactWriteItems (Atomic)"]
         direction TB
 
         AtomicNote["Atomic operation<br/>All updates succeed or fail together"]
