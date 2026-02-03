@@ -5,7 +5,9 @@ Capacity reservation and stock management service.
 This repository is intended as a **demo and discussion artifact**.
 
 ## Demo
-➡️ **Start here:** [Demo Guide](docs/demo.md)
+ ### Start here: [AWS_Architecture_and_Flow_Diagrams](docs/api-flow-diagrams.md)
+ 
+ ### Demo : [Demo Guide](docs/demo.md)
 
 The demo guide walks through:
 - Local setup (DynamoDB Local)
