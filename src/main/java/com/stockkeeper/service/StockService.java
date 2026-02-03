@@ -41,12 +41,7 @@ import java.util.Map;
 /**
  * Core service implementing the four stock operations: HOLD, COMMIT, LOAD, RELEASE.
  *
- * ═══════════════════════════════════════════════════════════════════════════
- * IDEMPOTENCY STRATEGY (design.md §5)
- * ═══════════════════════════════════════════════════════════════════════════
- *
  * Idempotency is a business property, NOT a client responsibility.
- *
  *   1. The reservation_id is deterministic:
  *      RESV#<shipment_id>#<capacity_type>#<stock_pk>#<stock_sk>
  *      The same logical operation ALWAYS produces the same key.
@@ -76,10 +71,6 @@ public class StockService {
     private final CapacityStockRepository stockRepository;
     private final ReservationRepository reservationRepository;
     private final CapacityConfigLoader configLoader;
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // HOLD (design.md §7)
-    // ═══════════════════════════════════════════════════════════════════════
 
     /**
      * Holds capacity for a shipment.
@@ -220,10 +211,6 @@ public class StockService {
         throw new RuntimeException("HOLD transaction failed: " + e.getMessage(), e);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // COMMIT (design.md §8)
-    // ═══════════════════════════════════════════════════════════════════════
-
     /**
      * Commits a held reservation: HELD → COMMITTED.
      *
@@ -264,10 +251,6 @@ public class StockService {
         return new CommitStockResponse(ReservationResponse.fromDomain(reservation), false);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // LOAD (design.md §8)
-    // ═══════════════════════════════════════════════════════════════════════
-
     /**
      * Loads a committed reservation: COMMITTED → LOADED.
      *
@@ -302,10 +285,6 @@ public class StockService {
         log.info("LOAD succeeded: reservationId={}", reservation.getReservationId());
         return new LoadStockResponse(ReservationResponse.fromDomain(reservation), false);
     }
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // RELEASE (design.md §8)
-    // ═══════════════════════════════════════════════════════════════════════
 
     /**
      * Releases a reservation from any non-terminal state: HELD/COMMITTED/LOADED → RELEASED.
@@ -357,10 +336,6 @@ public class StockService {
         return new ReleaseStockResponse(ReservationResponse.fromDomain(reservation), false);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    // QUERY operations (GET /stocks)
-    // ═══════════════════════════════════════════════════════════════════════
-
     /**
      * Lists stock items with optional filtering.
      *
@@ -391,10 +366,6 @@ public class StockService {
                 .map(CapacityStockResponse::fromDomain)
                 .orElseThrow(() -> new StockNotFoundException(pk, sk));
     }
-
-    // ═══════════════════════════════════════════════════════════════════════
-    // Shared transition logic
-    // ═══════════════════════════════════════════════════════════════════════
 
     /**
      * Reads the reservation for a transition request and validates that the
@@ -539,10 +510,6 @@ public class StockService {
                 + " is now " + current.getStatus()
                 + ", cannot transition to " + targetStatus);
     }
-
-    // -----------------------------------------------------------------------
-    // Utility
-    // -----------------------------------------------------------------------
 
     private static boolean isConditionalCheckFailed(CancellationReason reason) {
         return reason != null && "ConditionalCheckFailed".equals(reason.code());
