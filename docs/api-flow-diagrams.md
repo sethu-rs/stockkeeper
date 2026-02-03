@@ -49,12 +49,18 @@ flowchart TB
         Service[StockService]
     end
 
-    subgraph InMemory["In-Memory Product Catalog <br/> & Policy Engine"]
-    
-        ConfigFile[("In-Memory Cache")]
-        ProductCatalog["Product Catalog:<br/>Capacity Types, Class Flags,<br/>Handling Rules"]
-        PolicyEngine["Policy Engine:<br/>Eligibility, Transitions,<br/>Constraints"]
-        ConfigFile --> ProductCatalog --> PolicyEngine
+    subgraph InMemory["In-Memory Product Catalog & Policy"]
+        direction TB
+
+        Title["All product catalog data and policy rules<br/>are loaded in memory at startup<br/>No runtime network calls"]
+        
+        ConfigCache(("In-Memory Cache"))
+        ProductCatalog["Product Catalog<br/>Capacity Types · Class Flags · Handling Rules"]
+        PolicyEngine["Policy Engine<br/>Eligibility · Transitions · Constraints"]
+
+        Title --> ConfigCache
+        ConfigCache --> ProductCatalog
+        ProductCatalog --> PolicyEngine
     end
 
     subgraph DynamoDB["DynamoDB (State & Persistence Only)"]
