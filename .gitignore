@@ -1,0 +1,31 @@
+# Java / Gradle
+/build/
+.gradle/
+out/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# Secrets / local config
+application-local.yml
+.env
+
+# Claude / AI tooling
+.claude/
+.claude.json
+.mcp/
+.mcp-cache/
+
+# Node / Python (future MCP)
+node_modules/
+venv/
+__pycache__/
+
+# DynamoDB local data (if any)
+dynamodb-data/

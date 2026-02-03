@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+# ---------------------------------------------------------------------------
+# AWS / DynamoDB Local configuration
+# ---------------------------------------------------------------------------
+# For local development, DynamoDB Local runs as a Docker container on port 8000.
+# The credentials below are dummy values — DynamoDB Local accepts anything.
+# ---------------------------------------------------------------------------
+aws:
+  dynamodb:
+    endpoint: http://localhost:8000
+    region: us-east-1
+  credentials:
+    access-key: dummy
+    secret-key: dummy
+
+# ---------------------------------------------------------------------------
+# Capacity configuration file path (classpath-relative)
+# ---------------------------------------------------------------------------
+capacity:
+  config-path: classpath:capacity-config.yml
+
+spring:
+  application:
+    name: stockkeeper
+  jackson:
+    # Serialize Java camelCase fields as snake_case in JSON responses.
+    # e.g. reservationId → reservation_id, capacityType → capacity_type.
+    # This keeps the REST API consistent with the DynamoDB attribute naming.
+    property-naming-strategy: SNAKE_CASE
+    default-property-inclusion: non_null

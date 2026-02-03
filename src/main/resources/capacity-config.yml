@@ -1,0 +1,57 @@
+# ---------------------------------------------------------------------------
+# Capacity Configuration — single source of truth for business rules
+# ---------------------------------------------------------------------------
+# This file is loaded at startup and kept in memory.
+# Every API request is validated against these rules BEFORE any DynamoDB call.
+# ---------------------------------------------------------------------------
+
+# Supported capacity types and their per-type rules
+capacityTypes:
+
+  FLIGHT:
+    # Class flags allowed for flight capacity (e.g. cargo compartment classes)
+    allowedClassFlags:
+      - GENERAL
+      - PRIORITY
+      - EXPRESS
+      - DANGEROUS_GOODS
+    # Maximum minutes a HOLD reservation may be kept before it expires
+    maxHoldDurationMinutes: 60
+    # Unit of measure for capacity quantities
+    unitOfMeasure: KG
+
+  WAREHOUSE:
+    allowedClassFlags:
+      - GENERAL
+      - COLD_STORAGE
+      - HAZMAT
+      - OVERSIZED
+    maxHoldDurationMinutes: 120
+    unitOfMeasure: CBM
+
+  ULD:
+    allowedClassFlags:
+      - GENERAL
+      - PRIORITY
+      - TEMPERATURE_CONTROLLED
+    maxHoldDurationMinutes: 90
+    unitOfMeasure: KG
+
+# ---------------------------------------------------------------------------
+# Allowed state transitions for reservations.
+# Key = current state, Value = list of valid next states.
+# Any transition not listed here is rejected before touching DynamoDB.
+# ---------------------------------------------------------------------------
+allowedTransitions:
+  HELD:
+    - COMMITTED
+    - RELEASED
+  COMMITTED:
+    - LOADED
+    - RELEASED
+  LOADED:
+    - RELEASED
+
+# Terminal states — no further transitions allowed
+terminalStates:
+  - RELEASED
