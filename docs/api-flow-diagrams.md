@@ -49,9 +49,9 @@ flowchart TB
         Service[StockService]
     end
 
-    subgraph InMemory["In-Memory Product Catalog & Policy Engine"]
+    subgraph InMemory["In-Memory Product Catalog <br/> & Policy Engine"]
     
-        ConfigFile[("capacity-config.yml")]
+        ConfigFile[("In-Memory Cache")]
         ProductCatalog["Product Catalog:<br/>Capacity Types, Class Flags,<br/>Handling Rules"]
         PolicyEngine["Policy Engine:<br/>Eligibility, Transitions,<br/>Constraints"]
         ConfigFile --> ProductCatalog --> PolicyEngine
