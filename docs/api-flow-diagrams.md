@@ -110,12 +110,11 @@ flowchart TD
         direction TB
 
         AtomicNote["Atomic operation<br/>All writes succeed or fail together"]
+        AtomicNote --> T1
+        AtomicNote --> T2
 
         T1["Update Stock<br/>available -= qty<br/>held += qty<br/><br/>Condition:<br/>available_capacity >= qty"]
         T2["Put Reservation<br/>status = HELD<br/><br/>Condition:<br/>attribute_not_exists(reservation_id)"]
-
-        AtomicNote --> T1
-        T1 --> T2
     end
 
     Transaction --> Result{Result}
@@ -156,7 +155,7 @@ flowchart TD
     ValidateTrans -->|No| Err422[422 Invalid Transition]
     ValidateTrans -->|Yes| Transaction
 
-    subgraph Transaction["TransactWriteItems (Atomic)"]
+    subgraph Transaction["TransactWriteItems"]
         direction TB
 
         AtomicNote["Atomic operation<br/>All updates succeed or fail together"]
