@@ -28,13 +28,11 @@ The StockKeeper system is deployed in an **active–passive multi-region AWS arc
 | **AWS Architecture Diagram** | Infrastructure layer | Regions, VPCs, EKS, DynamoDB Global Tables, Route 53, DR strategy, failover |
 | **Mermaid Flow Diagrams** (this document) | Application layer | API operations, validation logic, state transitions, Policy Engine, DynamoDB mutations |
 
-> **Note:** All Mermaid diagrams in this document represent logical flows executing within the **active (primary) region**. Disaster recovery and cross-region replication are handled at the infrastructure layer.
-
 ---
 
 ## 1. System Architecture Overview
 
-*Deployed in an active–passive multi-region AWS architecture; flows shown assume the active (primary) region.*
+**All product catalog data and policy rules are loaded into memory at startup; no runtime network calls are made to external services for validation or policy decisions.**
 
 ```mermaid
 flowchart TB
@@ -52,6 +50,7 @@ flowchart TB
     end
 
     subgraph InMemory["In-Memory Product Catalog & Policy Engine"]
+    
         ConfigFile[("capacity-config.yml")]
         ProductCatalog["Product Catalog:<br/>Capacity Types, Class Flags,<br/>Handling Rules"]
         PolicyEngine["Policy Engine:<br/>Eligibility, Transitions,<br/>Constraints"]
