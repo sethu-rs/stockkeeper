@@ -27,6 +27,8 @@ node_modules/
 venv/
 __pycache__/
 .python-version
+mcp-server/.python-version
+mcp-server/.venv
 
 # DynamoDB local data (if any)
 dynamodb-data/
