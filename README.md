@@ -4,7 +4,7 @@ StockKeeper is a stateless, idempotent capacity reservation service designed for
 It enforces deterministic state transitions and business rules in memory, with DynamoDB used exclusively for state persistence and idempotency.
 The system is deployed in an active–passive multi-region AWS architecture.
 
-This repository is intended as a **demo and discussion artifact**, focused on domain modeling, correctness, and architectural trade-offs.
+This repository is intended as a **demo and discussion artifact**, focused on domain modeling, logical flow, and architectural trade-offs.
 
 ## Architecture Overview & Flow Diagrams
  ### 👉  [AWS_Architecture_and_Flow_Diagrams](docs/api-flow-diagrams.md)
