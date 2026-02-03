@@ -4,10 +4,43 @@ This document provides comprehensive Mermaid flow diagrams documenting all API o
 
 ---
 
+## Architecture Context
+
+### AWS Infrastructure & Disaster Recovery
+
+The StockKeeper system is deployed in an **active–passive multi-region AWS architecture**. For the complete infrastructure topology, disaster recovery strategy, and regional failover design, refer to the AWS Architecture Diagram below.
+
+![AWS Architecture Diagram](./images/stockkeeper-aws-architecture.png)
+
+#### Deployment Topology Summary
+
+| Aspect | Primary Region (Active) | Secondary Region (Passive) |
+|--------|-------------------------|----------------------------|
+| **Traffic** | All read/write operations | No traffic until failover |
+| **EKS Services** | Fully scaled, processing requests | Cold standby (scaled to 0) |
+| **DynamoDB** | Global Tables (active writes) | Global Tables (read-only replica) |
+| **Failover** | — | Promoted via Route 53 health checks |
+
+#### Separation of Concerns
+
+| Diagram Type | Scope | Covers |
+|--------------|-------|--------|
+| **AWS Architecture Diagram** | Infrastructure layer | Regions, VPCs, EKS, DynamoDB Global Tables, Route 53, DR strategy, failover |
+| **Mermaid Flow Diagrams** (this document) | Application layer | API operations, validation logic, state transitions, Policy Engine, DynamoDB mutations |
+
+> **Note:** All Mermaid diagrams in this document represent logical flows executing within the **active (primary) region**. Disaster recovery and cross-region replication are handled at the infrastructure layer and are not repeated in individual operation flows.
+
+---
+
 ## 1. System Architecture Overview
+
+*Deployed in an active–passive multi-region AWS architecture; flows shown assume the active (primary) region.*
 
 ```mermaid
 flowchart TB
+    subgraph Region["Primary Region (Active)"]
+    direction TB
+
     subgraph Client["Client Layer"]
         API[REST API Requests]
     end
@@ -62,8 +95,11 @@ flowchart TB
     Transaction --> StockTable
     Transaction --> ResvTable
 
+    end
+
     style PolicyEngine fill:#e8f5e9
     style ProductCatalog fill:#fff8e1
+    style Region fill:#f5f5f5,stroke:#1976d2,stroke-width:2px
 ```
 
 > **Key Insight:** Product rules and policy are enforced in memory before any DynamoDB write. DynamoDB is used only for state persistence, quantity mutations, and idempotency checks.
